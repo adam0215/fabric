@@ -1,6 +1,6 @@
 'use client'
 
-import { addBangToHexCode } from '../utils/colorUtils'
+import { addHashtagToHexCode } from '../utils/colorUtils'
 
 export default function ColorCardCodeCopyable({
     hexCode,
@@ -8,7 +8,7 @@ export default function ColorCardCodeCopyable({
     hexCode?: string
 }) {
     const copyColorCode = () => {
-        navigator.clipboard.writeText(addBangToHexCode(hexCode ?? ''))
+        navigator.clipboard.writeText(addHashtagToHexCode(hexCode ?? ''))
     }
 
     return (

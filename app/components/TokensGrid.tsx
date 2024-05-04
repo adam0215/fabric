@@ -20,7 +20,7 @@ export type TokenGridItem = {
 
 export default function TokenGrid({ items }: { items?: TokenGridItem[] }) {
     return (
-        <div className="grid w-full gap-4 auto-fit-[360px]">
+        <div className="auto-fit-[360px] grid w-full gap-4">
             {items &&
                 items.length > 0 &&
                 items.map(({ label, href }) => (

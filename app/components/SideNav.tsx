@@ -11,9 +11,11 @@ import { NAV_LINKS } from '../nav'
 export default function SideNav() {
     const pathname = usePathname()
 
+    const isAtEditorPage = pathname.split('/').filter(Boolean)[0] === 'editor'
+
     return (
-        <aside className="relative w-64">
-            <nav className="sticky top-0 flex h-screen w-full flex-col gap-12 p-8">
+        <aside className="relative">
+            <nav className="sticky top-0 flex h-screen w-64 flex-shrink-0 flex-col gap-10 p-8">
                 <Link href="/">
                     <Logo />
                 </Link>
@@ -30,12 +32,14 @@ export default function SideNav() {
                             </li>
                         ))}
                     </ul>
-                    <Link
-                        className="w-full rounded-full bg-zinc-800 px-4 py-2 text-sm text-white transition-all duration-150 hover:bg-zinc-700"
-                        href="editor/"
-                    >
-                        Edit design system
-                    </Link>
+                    {!isAtEditorPage && (
+                        <Link
+                            className="w-full rounded-full bg-zinc-800 px-4 py-2 text-center text-sm text-white transition-all duration-150 hover:bg-zinc-700"
+                            href="editor/"
+                        >
+                            Edit design system
+                        </Link>
+                    )}
                 </div>
             </nav>
         </aside>

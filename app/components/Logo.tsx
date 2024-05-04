@@ -1,12 +1,17 @@
-import { Tac_One } from 'next/font/google'
+import { Bricolage_Grotesque } from 'next/font/google'
 import { twMerge } from 'tailwind-merge'
 
-const tacOne = Tac_One({ weight: '400' })
+const bricolage_grotesque = Bricolage_Grotesque()
 
 export default function Logo() {
     return (
-        <div className={twMerge('text-4xl font-bold', tacOne.className)}>
-            FABRIC
+        <div
+            className={twMerge(
+                'text-4xl font-black',
+                bricolage_grotesque.className,
+            )}
+        >
+            fabric
         </div>
     )
 }

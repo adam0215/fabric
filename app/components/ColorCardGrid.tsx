@@ -1,45 +1,41 @@
-import React, { ReactNode } from 'react'
+import React from 'react'
 import ColorCardCodeCopyable from './ColorCardCodeCopyable'
-import { addBangToHexCode } from '../utils/colorUtils'
+import { addHashtagToHexCode } from '../utils/colorUtils'
 import tinycolor from 'tinycolor2'
 import { twMerge } from 'tailwind-merge'
+import { groupArrayOfObjects } from '../utils/arrayUtils'
 
 export type ColorCard = {
     name?: string
     hexCode?: string
     textColor?: string
-    id?: number
+    id: number
     category?: string
 }
 
-export default function ColorCardGrid({ items }: { items?: ColorCard[] }) {
-    const groupedColors = items?.reduce(
-        (groups: { [key: string]: ColorCard[] }, item: ColorCard) => {
-            groups[item.category!] ||= []
-            groups[item.category!].push(item)
-
-            return groups
-        },
-        {},
+export default function ColorCardGrid({
+    items,
+    colorCategoryDescriptions,
+}: {
+    items?: ColorCard[]
+    colorCategoryDescriptions: { [key: string]: string }
+}) {
+    const groupedColors = groupArrayOfObjects(
+        items ?? [],
+        (c) => c.category ?? 'uncategorized',
     )
 
     return (
-        <div className="flex w-full flex-col">
+        <div className="flex w-full flex-col gap-32">
             {groupedColors &&
                 Object.keys(groupedColors).map((category) => (
                     <div className="flex flex-col gap-16" key={category}>
-                        <div className="flex justify-between">
+                        <div className="flex flex-col justify-between gap-8 lg:flex-row">
                             <h2 className="font-display text-6xl font-bold">
                                 {category}
                             </h2>
-                            <p className="mt-2 w-[512px]">
-                                Mollit veniam do voluptate. Ad magna laborum
-                                velit. Culpa eiusmod deserunt dolore esse culpa
-                                sit est. Et velit enim nulla labore veniam
-                                voluptate proident nisi ex Lorem exercitation
-                                Lorem sit. Magna esse ex elit ea esse consequat
-                                nostrud in eiusmod amet occaecat occaecat
-                                voluptate in.
+                            <p className="mt-2 max-w-[512px]">
+                                {colorCategoryDescriptions[category]}
                             </p>
                         </div>
                         <div className="auto-fit-[360px] grid w-full gap-4">
@@ -54,8 +50,8 @@ export default function ColorCardGrid({ items }: { items?: ColorCard[] }) {
 }
 
 function ColorCard({ name, hexCode, textColor }: ColorCard) {
-    hexCode = addBangToHexCode(hexCode ?? '')
-    textColor = addBangToHexCode(textColor ?? '')
+    hexCode = addHashtagToHexCode(hexCode ?? '')
+    textColor = addHashtagToHexCode(textColor ?? '')
 
     const backgroundIsLight = tinycolor(hexCode).getLuminance() > 0.3
     const dynamicDefaultTextColor = backgroundIsLight

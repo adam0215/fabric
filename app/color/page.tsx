@@ -6,6 +6,15 @@ import PageWrapper from '../components/PageWrapper'
 export default async function ColorPage() {
     const colors = await getAllColors()
 
+    const colorCategoryDescriptions = colors.reduce(
+        (descriptions, color) => {
+            descriptions[color.color_category_name] =
+                color.color_category_description
+            return descriptions
+        },
+        {} as Record<string, string>,
+    )
+
     return (
         <PageWrapper>
             <HugePageTitle>Color</HugePageTitle>
@@ -16,6 +25,7 @@ export default async function ColorPage() {
                     id: color.id,
                     category: color.color_category_name,
                 }))}
+                colorCategoryDescriptions={colorCategoryDescriptions}
             />
         </PageWrapper>
     )

@@ -3,6 +3,7 @@ import { Bricolage_Grotesque, Exo_2, Overpass } from 'next/font/google'
 import './globals.css'
 import SideNav from './components/SideNav'
 import { twMerge } from 'tailwind-merge'
+import Header from './components/Header'
 
 const overpass = Overpass()
 const bricolage_grotesque = Bricolage_Grotesque()
@@ -27,9 +28,12 @@ export default function RootLayout({
             >
                 <div className="flex w-full max-w-[1440px]">
                     <SideNav />
-                    <main className="flex w-full flex-col px-8 pb-8 pt-20">
-                        {children}
-                    </main>
+                    <div className="w-full">
+                        <Header />
+                        <main className="flex max-w-full flex-col px-8 pb-8 pt-8">
+                            {children}
+                        </main>
+                    </div>
                 </div>
             </body>
         </html>

@@ -1,10 +1,13 @@
-import HugePageTitle from '../components/HugePageTitle'
-import PageWrapper from '../components/PageWrapper'
+import Link from 'next/link'
+import SmallPageTitle from '../components/SmallPageTitle'
+import AdminPageWrapper from '../components/AdminPageWrapper'
 
 export default function EditorMainPage() {
     return (
-        <PageWrapper>
-            <HugePageTitle>Edit Design System</HugePageTitle>
-        </PageWrapper>
+        <AdminPageWrapper>
+            <SmallPageTitle>Edit Design System</SmallPageTitle>
+
+            <Link href="editor/color">Color</Link>
+        </AdminPageWrapper>
     )
 }
