@@ -5,8 +5,13 @@ import {
     SquarePi,
     StickyNote,
     Type,
+    Image,
+    LandPlot,
+    BookA,
+    AudioLines,
 } from 'lucide-react'
 import Link from 'next/link'
+import React, { ReactNode } from 'react'
 
 export type TokenGridItem = {
     label?: string
@@ -15,7 +20,7 @@ export type TokenGridItem = {
 
 export default function TokenGrid({ items }: { items?: TokenGridItem[] }) {
     return (
-        <div className="grid w-full grid-cols-4 gap-4">
+        <div className="grid w-full gap-4 auto-fit-[360px]">
             {items &&
                 items.length > 0 &&
                 items.map(({ label, href }) => (
@@ -32,11 +37,9 @@ function TokenGridItem({
     href?: string
     children?: string
 }) {
-    console.log(href)
-
     return (
         <Link href={href ?? '/'}>
-            <div className="flex w-full flex-col gap-4">
+            <div className="flex flex-col gap-4">
                 <GridItemImage page={children} />
                 <p className="text-3xl font-bold">{children}</p>
             </div>
@@ -53,7 +56,7 @@ function GridItemImage({ page }: { page?: string }) {
     const pageIcon = getPageIcon(page ? page.toLowerCase() : '')
     const icons = []
 
-    let nIcons = 4
+    let nIcons = 4 + 1
     while (--nIcons) {
         icons.push(pageIcon)
     }
@@ -61,7 +64,12 @@ function GridItemImage({ page }: { page?: string }) {
     return (
         <div className="flex h-48 w-full items-center justify-center overflow-hidden rounded-lg bg-zinc-100">
             <div className="flex gap-4 stroke-zinc-400">
-                {icons.map((icon) => icon)}
+                {icons.map(
+                    (icon) =>
+                        React.cloneElement(icon, {
+                            key: page ?? '',
+                        }) as ReactNode,
+                )}
             </div>
         </div>
     )
@@ -79,6 +87,14 @@ function getPageIcon(page: string) {
             return <BetweenVerticalEnd {...pageIconDefaultProps} />
         case 'sizing':
             return <Ruler {...pageIconDefaultProps} />
+        case 'imagery':
+            return <Image {...pageIconDefaultProps} />
+        case 'mission':
+            return <LandPlot {...pageIconDefaultProps} />
+        case 'vocabulary':
+            return <BookA {...pageIconDefaultProps} />
+        case 'tone of voice':
+            return <AudioLines {...pageIconDefaultProps} />
         default:
             return <StickyNote {...pageIconDefaultProps} />
     }

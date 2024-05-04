@@ -27,7 +27,9 @@ export default function RootLayout({
             >
                 <div className="flex w-full max-w-[1440px]">
                     <SideNav />
-                    <main className="flex w-full flex-col p-8">{children}</main>
+                    <main className="flex w-full flex-col px-8 pb-8 pt-20">
+                        {children}
+                    </main>
                 </div>
             </body>
         </html>
