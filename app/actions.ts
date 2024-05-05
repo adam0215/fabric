@@ -59,3 +59,98 @@ export async function updateColorToken(colorId: number, formData: FormData) {
 
     return true
 }
+
+export async function deleteColorToken(colorId: number) {
+    await client.execute({
+        sql: `DELETE FROM colors WHERE id = (:id)`,
+        args: {
+            id: colorId,
+        },
+    })
+
+    revalidatePath('/editor/color')
+    revalidatePath('/color')
+
+    return true
+}
+
+export async function addColorToken(formData: FormData) {
+    const name = formData.get('color-name') as string
+    const hexCode = formData.get('hex-code') as string
+    const categoryId = formData.get('color-category') as string
+
+    if (!name && !hexCode && !categoryId) return false
+
+    await client.execute({
+        sql: `INSERT INTO colors (name, hex_code, color_category_id) VALUES ((:name), (:hexCode), (:categoryId));`,
+        args: {
+            name: name,
+            hexCode: hexCode,
+            categoryId: categoryId,
+        },
+    })
+
+    revalidatePath('/editor/color')
+    revalidatePath('/color')
+
+    return true
+}
+
+export async function addColorCategory(formData: FormData) {
+    const name = formData.get('category-name') as string
+    const description = formData.get('category-desc') as string
+
+    if (!name && !description) return false
+
+    await client.execute({
+        sql: `INSERT INTO color_categories (name, description) VALUES ((:name), (:description));`,
+        args: {
+            name: name,
+            description: description,
+        },
+    })
+
+    revalidatePath('/editor/color')
+    revalidatePath('/color')
+
+    return true
+}
+
+export async function updateColorCategory(
+    categoryId: number,
+    formData: FormData,
+) {
+    const name = formData.get('category-name') as string
+    const description = formData.get('category-desc') as string
+
+    if (!categoryId) return false
+    if (!name && !description) return false
+
+    await client.execute({
+        sql: `UPDATE color_categories SET name = (:name), description = (:description) WHERE id = (:id)`,
+        args: {
+            name: name,
+            description: description,
+            id: categoryId,
+        },
+    })
+
+    revalidatePath('/editor/color')
+    revalidatePath('/color')
+
+    return true
+}
+
+export async function deleteColorCategory(categoryId: number) {
+    await client.execute({
+        sql: `DELETE FROM color_categories WHERE id = (:id)`,
+        args: {
+            id: categoryId,
+        },
+    })
+
+    revalidatePath('/editor/color')
+    revalidatePath('/color')
+
+    return true
+}

@@ -32,14 +32,14 @@ function Breadcrumbs() {
             <span>Home</span>
             {pathSegments.map((breadcrumb, i) => {
                 return (
-                    <>
+                    <span className="inline-flex items-center" key={i}>
                         <Dot
                             size={24}
                             color="inherit"
                             className="stroke-zinc-400"
                         />
                         <span>{formatBreadcrumnLabel(breadcrumb)}</span>
-                    </>
+                    </span>
                 )
             })}
         </div>
