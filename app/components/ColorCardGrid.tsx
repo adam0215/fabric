@@ -4,6 +4,7 @@ import { addHashtagToHexCode } from '../utils/colorUtils'
 import tinycolor from 'tinycolor2'
 import { twMerge } from 'tailwind-merge'
 import { groupArrayOfObjects } from '../utils/arrayUtils'
+import { getAllCategories } from '../actions'
 
 export type ColorCard = {
     name?: string
@@ -11,40 +12,42 @@ export type ColorCard = {
     textColor?: string
     id: number
     category?: string
+    category_id?: number
 }
 
-export default function ColorCardGrid({
+export default async function ColorCardGrid({
     items,
-    colorCategoryDescriptions,
 }: {
     items?: ColorCard[]
-    colorCategoryDescriptions: { [key: string]: string }
 }) {
-    const groupedColors = groupArrayOfObjects(
-        items ?? [],
-        (c) => c.category ?? 'uncategorized',
-    )
+    const colors = items
+    const colorCategories = await getAllCategories()
 
     return (
         <div className="flex w-full flex-col gap-32">
-            {groupedColors &&
-                Object.keys(groupedColors).map((category) => (
-                    <div className="flex flex-col gap-16" key={category}>
-                        <div className="flex flex-col justify-between gap-8 lg:flex-row">
-                            <h2 className="font-display text-6xl font-bold">
-                                {category}
-                            </h2>
-                            <p className="mt-2 max-w-[512px]">
-                                {colorCategoryDescriptions[category]}
-                            </p>
-                        </div>
-                        <div className="auto-fit-[360px] grid w-full gap-4">
-                            {groupedColors[category].map((color) => (
-                                <ColorCard key={color.id} {...color} />
-                            ))}
-                        </div>
+            {colorCategories.map((category) => (
+                <div className="flex flex-col gap-16" key={category.id}>
+                    <div className="flex flex-col justify-between gap-8 lg:flex-row">
+                        <h2 className="font-display text-6xl font-bold">
+                            {category.name}
+                        </h2>
+                        <p className="mt-2 max-w-[512px]">
+                            {category.description}
+                        </p>
                     </div>
-                ))}
+                    <div className="grid w-full gap-4 auto-fit-[360px]">
+                        {colors &&
+                            colors
+                                .filter(
+                                    (color) =>
+                                        color.category_id === category.id,
+                                )
+                                .map((color) => (
+                                    <ColorCard key={color.id} {...color} />
+                                ))}
+                    </div>
+                </div>
+            ))}
         </div>
     )
 }

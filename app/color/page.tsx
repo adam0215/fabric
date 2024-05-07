@@ -24,8 +24,8 @@ export default async function ColorPage() {
                     name: color.name,
                     id: color.id,
                     category: color.color_category_name,
+                    category_id: color.color_category_id,
                 }))}
-                colorCategoryDescriptions={colorCategoryDescriptions}
             />
         </PageWrapper>
     )

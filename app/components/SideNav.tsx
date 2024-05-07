@@ -10,7 +10,6 @@ import { NAV_LINKS } from '../nav'
 
 export default function SideNav() {
     const pathname = usePathname()
-
     const isAtEditorPage = pathname.split('/').filter(Boolean)[0] === 'editor'
 
     return (
@@ -58,7 +57,7 @@ function MenuLink({
     return (
         <Link
             className={twMerge(
-                clsx('cursor-pointer hover:underline', active && 'font-black'),
+                clsx('cursor-pointer hover:underline', active && 'font-bold'),
             )}
             href={href}
         >
@@ -68,5 +67,5 @@ function MenuLink({
 }
 
 function isLinkActive(currentPathName: string, linkPathName: string) {
-    return `/${linkPathName}` == currentPathName
+    return linkPathName == currentPathName
 }
