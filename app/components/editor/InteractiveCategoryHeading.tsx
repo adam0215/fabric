@@ -1,6 +1,6 @@
 'use client'
 
-import { ColorCategoriesTableSchemaType } from '@/app/dbSchema'
+import { ColorCategoriesTableSchemaType } from '@/app/querySchemas'
 import { Pencil, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import {

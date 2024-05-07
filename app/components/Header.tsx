@@ -14,10 +14,24 @@ import { NAV_LINKS } from '../nav'
 import { useEffect, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 
-export default function Header() {
+export default function Header({
+    organizationName,
+    currentDesignSystem,
+}: {
+    organizationName?: string
+    currentDesignSystem?: string
+}) {
     return (
-        <header className="flex w-full justify-between p-8">
+        <header className="flex w-full items-center justify-between p-8">
             <Breadcrumbs />
+            <div className="flex gap-2">
+                {organizationName && (
+                    <span className="font-bold">{organizationName}</span>
+                )}
+                {currentDesignSystem && (
+                    <span className="text-zinc-600">{currentDesignSystem}</span>
+                )}
+            </div>
             <CommandBox />
         </header>
     )

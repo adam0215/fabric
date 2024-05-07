@@ -29,7 +29,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/app/components/shadcn/select'
-import { ColorCategoriesTableSchemaType } from '@/app/dbSchema'
+import { ColorCategoriesTableSchemaType } from '@/app/querySchemas'
 import { ConfirmDeleteDialog } from './ConfirmDeleteDialog'
 
 export type ColorTokenCard = {

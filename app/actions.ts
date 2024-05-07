@@ -2,10 +2,13 @@
 
 import { createClient } from '@libsql/client'
 import {
-    ColorCategoriesTableZodSchema,
-    ExtendedColorsSchemaType,
+    ColorCategoriesZodSchema,
+    EnabledSectionsZodSchema,
     ExtendedColorsZodSchema,
-} from './dbSchema'
+    OrganizationDesignSystemInfoZodSchema,
+    OrganizationDesignSystemsZodSchema,
+    OrganizationInfoZodSchema,
+} from './querySchemas'
 import { revalidatePath } from 'next/cache'
 
 const client = createClient({
@@ -13,7 +16,7 @@ const client = createClient({
     authToken: process.env.TURSO_AUTH_TOKEN,
 })
 
-export async function getAllColors(): Promise<ExtendedColorsSchemaType> {
+export async function getAllColors() {
     const { rows } = await client.execute({
         sql: 'SELECT colors.*, color_categories.name AS color_category_name, color_categories.description AS color_category_description FROM colors JOIN color_categories ON colors.color_category_id = color_categories.id;',
         args: {},
@@ -28,7 +31,50 @@ export async function getAllCategories() {
         args: {},
     })
 
-    return ColorCategoriesTableZodSchema.parse(rows)
+    return ColorCategoriesZodSchema.parse(rows)
+}
+
+export async function getEnabledSections(designSystemId: number) {
+    const { rows } = await client.execute({
+        sql: `SELECT
+                ds.name AS section_name
+                FROM
+                design_system_sections AS ds
+                JOIN organization_design_system_sections AS org_ds ON ds.id = org_ds.section_id
+                JOIN organization_design_systems AS org_design ON org_ds.design_system_id = org_design.id
+                WHERE
+                org_ds.mode = 1
+                AND org_design.organization_id = (:designSystemId);`,
+        args: { designSystemId: designSystemId },
+    })
+
+    return EnabledSectionsZodSchema.parse(rows)
+}
+
+export async function getOrganizationDesignSystems(organizationId: number) {
+    const { rows } = await client.execute({
+        sql: 'SELECT * FROM organization_design_systems WHERE organization_id = (:organizationId)',
+        args: { organizationId: organizationId },
+    })
+
+    return OrganizationDesignSystemsZodSchema.parse(rows[0])
+}
+export async function getOrganizationInfo(organizationId: number) {
+    const { rows } = await client.execute({
+        sql: 'SELECT name FROM organizations WHERE id = (:organizationId) LIMIT 1',
+        args: { organizationId: organizationId },
+    })
+
+    return OrganizationInfoZodSchema.parse(rows[0])
+}
+
+export async function getDesignSystemInfo(designSystemId: number) {
+    const { rows } = await client.execute({
+        sql: 'SELECT name, description FROM organization_design_systems WHERE id = (:designSystemId) LIMIT 1',
+        args: { designSystemId: designSystemId },
+    })
+
+    return OrganizationDesignSystemInfoZodSchema.parse(rows[0])
 }
 
 export async function updateColorToken(colorId: number, formData: FormData) {
